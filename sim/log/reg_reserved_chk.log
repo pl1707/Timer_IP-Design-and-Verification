@@ -1,9 +1,6 @@
-# vsim -debugDB -l reg_reserved_chk.log -voptargs="+access" -assertdebug -c test_bench -do "log -r /*;run -all;" 
-# Start time: 23:17:53 on Jul 08,2025
+# vsim -coverage -l reg_reserved_chk.log -c test_bench -voptargs="+cover=bcesft" -assertdebug -do "coverage save -onexit reg_reserved_chk.ucdb; log -r /*;run -all" 
+# Start time: 17:52:10 on Jul 09,2025
 # ** Note: (vsim-3813) Design is being optimized due to module recompilation...
-# ** Note: (vsim-8611) Generating debug db.
-# ** Warning: (vopt-4308) Enabling visibility using +acc is recommended with debug flow.
-# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=1.
 # //  Questa Intel Starter FPGA Edition-64
 # //  Version 2023.3 linux_x86_64 Jul 17 2023
 # //
@@ -19,13 +16,8 @@
 # //  18 U.S.C. Section 1905.
 # //
 # Loading work.test_bench(fast)
-# Loading work.timer_top(fast)
-# Loading work.apb_interface(fast)
-# Loading work.register(fast)
-# Loading work.counter(fast)
-# Loading work.counter_control(fast)
-# ** Note: (vsim-8900) Creating design debug database vsim.dbg.
-# log -r /*
+# coverage save -onexit reg_reserved_chk.ucdb
+#  log -r /*
 # run -all
 # ====================================
 # ====== Test Case: check Reserved  ========
@@ -36,7 +28,8 @@
 # t=       375 PASS: rdata = 00000000 at addr ffffffff is correct
 # ------------------------------------------------
 # Test_result PASSED
-# ** Note: $finish    : ../tb/test_bench.v(76)
+# ** Note: $finish    : ../tb/test_bench.v(119)
 #    Time: 475 ns  Iteration: 0  Instance: /test_bench
-# End time: 23:17:56 on Jul 08,2025, Elapsed time: 0:00:03
-# Errors: 0, Warnings: 1
+# Saving coverage database on exit...
+# End time: 17:52:12 on Jul 09,2025, Elapsed time: 0:00:02
+# Errors: 0, Warnings: 0

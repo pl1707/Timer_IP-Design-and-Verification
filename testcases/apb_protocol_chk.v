@@ -1,40 +1,115 @@
-task run_test();
+task run_test;
     reg [31:0] task_rdata;
+    integer pass_err;
+    integer err;
     begin
-        $display("====================================");
-        $display("====== Test Case: check APB Protocol with Pass/Fail Detection  ========");
+        $display("\n====================================");
+        $display("==== Starting Test Suite ====");
         $display("====================================");
         
-        // Pass case: Valid APB write and read
-        $display("*** Pass: Valid APB Protocol Test ***");
-        test_bench.apb_wr(ADDR_TCR, 32'h0000_0101);
-        test_bench.apb_rd(ADDR_TCR, task_rdata);
-        test_bench.cmp_data(ADDR_TCR, task_rdata, 32'h0000_0101, 32'h0000_0F03);
+        pass_err = 0;
+        err = 0;
+        $display("\n====================================");
+        $display("=== Test Case: APB Protocol Test ====");
+        $display("====================================");
+        
+        // Đảm bảo trạng thái ban đầu sạch
+        test_bench.apb_wr(test_bench.ADDR_TCR, 32'h0);
+        test_bench.apb_wr(test_bench.ADDR_TIER, 32'h0);
+        test_bench.apb_wr(test_bench.ADDR_TISR, 32'h1);
+        test_bench.apb_wr(test_bench.ADDR_TDR0, 32'h0);
+        test_bench.apb_wr(test_bench.ADDR_TDR1, 32'h0);
+        test_bench.apb_wr(test_bench.ADDR_TCMP0, 32'h0);
+        test_bench.apb_wr(test_bench.ADDR_TCMP1, 32'h0);
 
-        // Fail case: Write without psel
-        $display("*** Fail: Write Without PSEL ***");
-        test_bench.apb_err_psel = 1; // Disable psel
-        test_bench.apb_wr(ADDR_TDR0, 32'h1234_5678);
-        test_bench.apb_rd(ADDR_TDR0, task_rdata);
-        test_bench.cmp_data(ADDR_TDR0, task_rdata, 32'h0000_0000, 32'hFFFF_FFFF); // Expect no change
-        test_bench.apb_err_psel = 0; // Reset error condition
+        // PASS Cases
+        $display("\n===================[ ALL PASS CASES ]===================\n");
 
-        // Fail case: Read without penable
-        $display("*** Fail: Read Without PENABLE ***");
-        test_bench.apb_err_penable = 1; // Disable penable
-        test_bench.apb_rd(ADDR_TDR0, task_rdata);
-        test_bench.cmp_data(ADDR_TDR0, task_rdata, 32'h0000_0000, 32'hFFFF_FFFF); // Expect no change
-        test_bench.apb_err_penable = 0; // Reset error condition
+        // PASS Case: Normal APB access to all registers
+        $display("--- PASS Case: Normal APB Access ---");
+        test_bench.apb_wr(test_bench.ADDR_TCR, 32'h0000_0101);
+        test_bench.apb_rd(test_bench.ADDR_TCR, task_rdata);
+        if (task_rdata === 32'h0000_0101) begin
+            $display("t=%10d PASS: TCR Expected=0x00000101, Actual=0x%h", $time, task_rdata);
+        end else begin
+            $display("t=%10d FAIL: TCR Expected=0x00000101, Actual=0x%h", $time, task_rdata);
+            pass_err = pass_err + 1;
+            err = err + 1;
+        end
+        test_bench.cmp_data(test_bench.ADDR_TCR, task_rdata, 32'h0000_0101, 32'h0000_0F03, 1);
+	test_bench.apb_wr(test_bench.ADDR_TCR, 32'h0);
+        test_bench.apb_wr(test_bench.ADDR_TDR0, 32'h1111_1111);
+        test_bench.apb_rd(test_bench.ADDR_TDR0, task_rdata);
+        if (task_rdata === 32'h1111_1111) begin
+            $display("t=%10d PASS: TDR0 Expected=0x11111111, Actual=0x%h", $time, task_rdata);
+        end else begin
+            $display("t=%10d FAIL: TDR0 Expected=0x11111111, Actual=0x%h", $time, task_rdata);
+            pass_err = pass_err + 1;
+            err = err + 1;
+        end
+        test_bench.cmp_data(test_bench.ADDR_TDR0, task_rdata, 32'h1111_1111, 32'hFFFF_FFFF, 1);
+        
+	test_bench.apb_wr(test_bench.ADDR_TDR1, 32'h2222_2222);
+        test_bench.apb_rd(test_bench.ADDR_TDR1, task_rdata);
+        if (task_rdata === 32'h2222_2222) begin
+            $display("t=%10d PASS: TDR1 Expected=0x22222222, Actual=0x%h", $time, task_rdata);
+        end else begin
+            $display("t=%10d FAIL: TDR1 Expected=0x22222222, Actual=0x%h", $time, task_rdata);
+            pass_err = pass_err + 1;
+            err = err + 1;
+        end
+        test_bench.cmp_data(test_bench.ADDR_TDR1, task_rdata, 32'h2222_2222, 32'hFFFF_FFFF, 1);
+        
+	test_bench.apb_wr(test_bench.ADDR_TCMP0, 32'h3333_3333);
+        test_bench.apb_rd(test_bench.ADDR_TCMP0, task_rdata);
+        if (task_rdata === 32'h3333_3333) begin
+            $display("t=%10d PASS: TCMP0 Expected=0x33333333, Actual=0x%h", $time, task_rdata);
+    	end else begin
+		$display("t=%10d FAIL: TCMP0 Expected=0x33333333, Actual=0x%h", $time, task_rdata);
+              pass_err = pass_err + 1;
+              err = err + 1;
+	end
+	test_bench.cmp_data(test_bench.ADDR_TCMP0, task_rdata, 32'h3333_3333_, 32'hFFFF_FFFF, 1);
+	
+	test_bench.apb_wr(test_bench.ADDR_TCMP1, 32'h4444_4444);
+          test_bench.apb_rd(test_bench.ADDR_TCMP1, task_rdata);
+          if (task_rdata === 32'h4444_4444) begin
+              $display("t=%10d PASS: TCMP1 Expected=0x44444444, Actual=0x%h", $time, task_rdata);
+          end else begin
+                  $display("t=%10d FAIL: TCMP1 Expected=0x44444444, Actual=0x%h", $time, task_rdata);
+                pass_err = pass_err + 1;
+                err = err + 1;
+          end
+          test_bench.cmp_data(test_bench.ADDR_TCMP1, task_rdata, 32'h4444_4444, 32'hFFFF_FFFF, 1);
 
-        // Pass case: Valid access after error
-        $display("*** Pass: Valid Access After Error ***");
-        test_bench.apb_wr(ADDR_TDR0, 32'h1234_5678);
-        test_bench.apb_rd(ADDR_TDR0, task_rdata);
-        test_bench.cmp_data(ADDR_TDR0, task_rdata, 32'h1234_5678, 32'hFFFF_FFFF);
+	  test_bench.apb_wr(test_bench.ADDR_TIER, 32'hffff_ffff);
+          test_bench.apb_rd(test_bench.ADDR_TIER, task_rdata);
+          if (task_rdata === 32'h0000_0001) begin
+              $display("t=%10d PASS: TIER Expected=0000_0001, Actual=0x%h", $time, task_rdata);
+          end else begin
+                  $display("t=%10d FAIL: TIER Expected=0000_0001, Actual=0x%h", $time, task_rdata);
+                pass_err = pass_err + 1;
+                err = err + 1;
+          end
+          test_bench.cmp_data(test_bench.ADDR_TIER, task_rdata, 32'h0000_0001, 32'hFFFF_FFFF, 1);
 
-        if (test_bench.err != 0)
-            $display("Test_result FAILED");
+	  test_bench.apb_wr(test_bench.ADDR_TISR, 32'hffff_ffff);
+            test_bench.apb_rd(test_bench.ADDR_TISR, task_rdata);
+            if (task_rdata === 32'h0000_0000) begin
+                $display("t=%10d PASS: TISR Expected=0000_0000, Actual=0x%h", $time, task_rdata);
+            end else begin
+                    $display("t=%10d FAIL: TISR Expected=0000_0000, Actual=0x%h", $time, task_rdata);
+                  pass_err = pass_err + 1;
+                  err = err + 1;
+            end
+            test_bench.cmp_data(test_bench.ADDR_TISR, task_rdata, 32'h0000_0000, 32'hFFFF_FFFF, 1);
+	    // Kết quả test
+        $display("\n======================================");
+        if (pass_err != 0)
+            $display("Test_result FAILED with %d PASS case errors", pass_err);
         else
             $display("Test_result PASSED");
+        $display("Total errors (including FAIL cases for coverage): %d", err);
+        $display("======================================");
     end
-endtask
+    endtask

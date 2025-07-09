@@ -1,0 +1,66 @@
+Coverage Report Summary Data by instance
+
+=================================================================================
+=== Instance: /test_bench/u_timer/apb
+=== Design Unit: work.apb_interface
+=================================================================================
+    Enabled Coverage              Bins      Hits    Misses  Coverage
+    ----------------              ----      ----    ------  --------
+    Expressions                      6         4         2    66.66%
+    Statements                       2         2         0   100.00%
+
+=================================================================================
+=== Instance: /test_bench/u_timer/regset
+=== Design Unit: work.register
+=================================================================================
+    Enabled Coverage              Bins      Hits    Misses  Coverage
+    ----------------              ----      ----    ------  --------
+    Branches                        31        29         2    93.54%
+    Expressions                     40        32         8    80.00%
+    Statements                      49        48         1    97.95%
+    Toggles                        378       368        10    97.35%
+
+=================================================================================
+=== Instance: /test_bench/u_timer/cnt_logic
+=== Design Unit: work.counter
+=================================================================================
+    Enabled Coverage              Bins      Hits    Misses  Coverage
+    ----------------              ----      ----    ------  --------
+    Branches                        10        10         0   100.00%
+    Statements                       9         9         0   100.00%
+    Toggles                        384       356        28    92.70%
+
+=================================================================================
+=== Instance: /test_bench/u_timer/cnt_ctr
+=== Design Unit: work.counter_control
+=================================================================================
+    Enabled Coverage              Bins      Hits    Misses  Coverage
+    ----------------              ----      ----    ------  --------
+    Branches                        18        10         8    55.55%
+    Conditions                       3         1         2    33.33%
+    Expressions                     16         2        14    12.50%
+    Statements                      21        16         5    76.19%
+    Toggles                         56        18        38    32.14%
+
+=================================================================================
+=== Instance: /test_bench/u_timer
+=== Design Unit: work.timer_top
+=================================================================================
+    Enabled Coverage              Bins      Hits    Misses  Coverage
+    ----------------              ----      ----    ------  --------
+    Toggles                        150       148         2    98.66%
+
+=================================================================================
+=== Instance: /test_bench
+=== Design Unit: work.test_bench
+=================================================================================
+    Enabled Coverage              Bins      Hits    Misses  Coverage
+    ----------------              ----      ----    ------  --------
+    Branches                        58        32        26    55.17%
+    Conditions                      38        10        28    26.31%
+    Statements                     289       217        72    75.08%
+    Toggles                        674       162       512    24.03%
+
+
+Total Coverage By Instance (filtered view): 60.06%
+

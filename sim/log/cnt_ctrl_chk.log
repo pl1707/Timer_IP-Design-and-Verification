@@ -1,0 +1,156 @@
+# vsim -coverage -l cnt_ctrl_chk.log -c test_bench -voptargs="+cover=bcesft" -assertdebug -do "coverage save -onexit cnt_ctrl_chk.ucdb; log -r /*;run -all" 
+# Start time: 15:42:05 on Jul 09,2025
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# //  Questa Intel Starter FPGA Edition-64
+# //  Version 2023.3 linux_x86_64 Jul 17 2023
+# //
+# //  Copyright 1991-2023 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# Loading work.test_bench(fast)
+# coverage save -onexit cnt_ctrl_chk.ucdb
+#  log -r /*
+# run -all
+# 
+# ====================================
+# ==== Starting Test Suite ====
+# ====================================
+# 
+# ====================================
+# ====== Test Case: Counter Control ====
+# ====================================
+# t=       100 [TB_WRITE]: addr=00000000 data=00000000
+# t=       226 [TB_WRITE]: addr=00000014 data=00000000
+# t=       376 [TB_WRITE]: addr=00000018 data=00000001
+# t=       526 [TB_WRITE]: addr=00000004 data=00000000
+# t=       676 [TB_WRITE]: addr=00000008 data=00000000
+# t=       826 [TB_WRITE]: addr=0000000c data=00000000
+# t=       976 [TB_WRITE]: addr=00000010 data=00000000
+# 
+# ===================[ ALL PASS CASES ]===================
+# 
+# --- PASS Case: System Clock ---
+# t=      1176 [TB_WRITE]: addr=00000004 data=00000000
+# t=      1326 [TB_WRITE]: addr=00000008 data=00000000
+# t=      1476 [TB_WRITE]: addr=00000000 data=00000001
+# t=      6475 [TB_WRITE]: addr=00000000 data=00000000
+# t=      6775 [TB_READ]: addr=00000004 rdata=00000064
+# t=      6925 [TB_READ]: addr=00000008 rdata=00000000
+# t=      6925 PASS: System Clock, Expect=                 100, Actual=                 100
+# ------------------------------------------------
+# t=      6925 PASS: rdata = 00000064 at addr 00000004 is correct
+# ------------------------------------------------
+# 
+# --- PASS Case: Valid div_val ---
+# --- div_val=0x0000000303 ---
+# t=      6976 [TB_WRITE]: addr=00000004 data=00000000
+# t=      7126 [TB_WRITE]: addr=00000008 data=00000000
+# t=      7276 [TB_WRITE]: addr=00000000 data=00000303
+# t=     57425 [TB_WRITE]: addr=00000000 data=00000300
+# t=     57725 [TB_READ]: addr=00000004 rdata=0000007d
+# t=     57875 [TB_READ]: addr=00000008 rdata=00000000
+# t=     57875 PASS: div_val=0x0000000303, Expect=        125, Actual=                 125
+# ------------------------------------------------
+# t=     57875 PASS: rdata = 0000007d at addr 00000004 is correct
+# ------------------------------------------------
+# --- div_val=0x0000000403 ---
+# t=     57926 [TB_WRITE]: addr=00000004 data=00000000
+# t=     58076 [TB_WRITE]: addr=00000008 data=00000000
+# t=     58226 [TB_WRITE]: addr=00000000 data=00000403
+# t=    108375 [TB_WRITE]: addr=00000000 data=00000400
+# t=    108675 [TB_READ]: addr=00000004 rdata=0000003e
+# t=    108825 [TB_READ]: addr=00000008 rdata=00000000
+# t=    108825 PASS: div_val=0x0000000403, Expect=         62, Actual=                  62
+# ------------------------------------------------
+# t=    108825 PASS: rdata = 0000003e at addr 00000004 is correct
+# ------------------------------------------------
+# --- div_val=0x0000000503 ---
+# t=    108876 [TB_WRITE]: addr=00000004 data=00000000
+# t=    109026 [TB_WRITE]: addr=00000008 data=00000000
+# t=    109176 [TB_WRITE]: addr=00000000 data=00000503
+# t=    159325 [TB_WRITE]: addr=00000000 data=00000500
+# t=    159625 [TB_READ]: addr=00000004 rdata=0000001f
+# t=    159775 [TB_READ]: addr=00000008 rdata=00000000
+# t=    159775 PASS: div_val=0x0000000503, Expect=         31, Actual=                  31
+# ------------------------------------------------
+# t=    159775 PASS: rdata = 0000001f at addr 00000004 is correct
+# ------------------------------------------------
+# --- div_val=0x0000000603 ---
+# t=    159826 [TB_WRITE]: addr=00000004 data=00000000
+# t=    159976 [TB_WRITE]: addr=00000008 data=00000000
+# t=    160126 [TB_WRITE]: addr=00000000 data=00000603
+# t=    210275 [TB_WRITE]: addr=00000000 data=00000600
+# t=    210575 [TB_READ]: addr=00000004 rdata=0000000f
+# t=    210725 [TB_READ]: addr=00000008 rdata=00000000
+# t=    210725 PASS: div_val=0x0000000603, Expect=         15, Actual=                  15
+# ------------------------------------------------
+# t=    210725 PASS: rdata = 0000000f at addr 00000004 is correct
+# ------------------------------------------------
+# --- div_val=0x0000000703 ---
+# t=    210776 [TB_WRITE]: addr=00000004 data=00000000
+# t=    210926 [TB_WRITE]: addr=00000008 data=00000000
+# t=    211076 [TB_WRITE]: addr=00000000 data=00000703
+# t=    261225 [TB_WRITE]: addr=00000000 data=00000700
+# t=    261525 [TB_READ]: addr=00000004 rdata=00000007
+# t=    261675 [TB_READ]: addr=00000008 rdata=00000000
+# t=    261675 FAIL: div_val=0x0000000703, Expect=          7, Actual=                   7
+# ------------------------------------------------
+# t=    261675 PASS: rdata = 00000007 at addr 00000004 is correct
+# ------------------------------------------------
+# --- div_val=0x0000000803 ---
+# t=    261726 [TB_WRITE]: addr=00000004 data=00000000
+# t=    261876 [TB_WRITE]: addr=00000008 data=00000000
+# t=    262026 [TB_WRITE]: addr=00000000 data=00000803
+# t=    312175 [TB_WRITE]: addr=00000000 data=00000800
+# t=    312475 [TB_READ]: addr=00000004 rdata=00000003
+# t=    312625 [TB_READ]: addr=00000008 rdata=00000000
+# t=    312625 FAIL: div_val=0x0000000803, Expect=          3, Actual=                   3
+# ------------------------------------------------
+# t=    312625 PASS: rdata = 00000003 at addr 00000004 is correct
+# ------------------------------------------------
+# 
+# --- PASS Case: TCMP0/TCMP1 Write/Read ---
+# t=    312625 [TB_WRITE]: addr=0000000c data=000000ff
+# t=    312925 [TB_READ]: addr=0000000c rdata=000000ff
+# t=    312925 PASS: TCMP0 Expected=0x000000FF, Actual=0x000000ff
+# ------------------------------------------------
+# t=    312925 PASS: rdata = 000000ff at addr 0000000c is correct
+# ------------------------------------------------
+# t=    312925 [TB_WRITE]: addr=00000010 data=00000000
+# t=    313225 [TB_READ]: addr=00000010 rdata=00000000
+# t=    313225 PASS: TCMP1 Expected=0x00000000, Actual=0x00000000
+# ------------------------------------------------
+# t=    313225 PASS: rdata = 00000000 at addr 00000010 is correct
+# ------------------------------------------------
+# 
+# --- PASS Case: TIER and TISR ---
+# t=    313225 [TB_WRITE]: addr=00000014 data=00000001
+# t=    313525 [TB_READ]: addr=00000014 rdata=00000001
+# t=    313525 PASS: TIER Expected=0x00000001, Actual=0x00000001
+# ------------------------------------------------
+# t=    313525 PASS: rdata = 00000001 at addr 00000014 is correct
+# ------------------------------------------------
+# t=    313525 [TB_WRITE]: addr=00000018 data=00000001
+# t=    313825 [TB_READ]: addr=00000018 rdata=00000000
+# t=    313825 PASS: TISR Expected=0x00000000, Actual=0x00000000
+# ------------------------------------------------
+# t=    313825 PASS: rdata = 00000000 at addr 00000018 is correct
+# ------------------------------------------------
+# 
+# ======================================
+# Test_result PASSED
+# Total errors (including FAIL cases for coverage):           0
+# ======================================
+# ** Note: $finish    : ../tb/test_bench.v(119)
+#    Time: 313925 ns  Iteration: 0  Instance: /test_bench
+# Saving coverage database on exit...
+# End time: 15:42:13 on Jul 09,2025, Elapsed time: 0:00:08
+# Errors: 0, Warnings: 0

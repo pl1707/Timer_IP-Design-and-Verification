@@ -1,9 +1,6 @@
-# vsim -debugDB -l reg_reserved_chk.log -voptargs="+access" -assertdebug -c test_bench -do "log -r /*;run -all;" 
-# Start time: 23:17:53 on Jul 08,2025
-# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
-# ** Note: (vsim-8611) Generating debug db.
-# ** Warning: (vopt-4308) Enabling visibility using +acc is recommended with debug flow.
-# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=1.
+# vsim -coverage -l reg_rw_chk.log -c test_bench -voptargs="+cover=bcesft" -assertdebug -do "coverage save -onexit reg_rw_chk.ucdb; log -r /*;run -all" 
+# Start time: 17:54:17 on Jul 09,2025
+# ** Note: (vsim-3812) Design is being optimized...
 # //  Questa Intel Starter FPGA Edition-64
 # //  Version 2023.3 linux_x86_64 Jul 17 2023
 # //
@@ -19,24 +16,200 @@
 # //  18 U.S.C. Section 1905.
 # //
 # Loading work.test_bench(fast)
-# Loading work.timer_top(fast)
-# Loading work.apb_interface(fast)
-# Loading work.register(fast)
-# Loading work.counter(fast)
-# Loading work.counter_control(fast)
-# ** Note: (vsim-8900) Creating design debug database vsim.dbg.
-# log -r /*
+# coverage save -onexit reg_rw_chk.ucdb
+#  log -r /*
 # run -all
 # ====================================
-# ====== Test Case: check Reserved  ========
+# ====== Test Case: check RW  ========
 # ====================================
-# t=       100 [TB_WRITE]: addr=ffffffff data=ffff1234
-# t=       375 [TB_READ]: addr=ffffffff rdata=00000000
+# *** TCR ***
+# t=       100 [TB_WRITE]: addr=00000000 data=00000000
+# t=       375 [TB_READ]: addr=00000000 rdata=00000000
+# t=       525 [TB_READ]: addr=00000000 rdata=00000000
+# t=       525 PASS: TCR Expected=0x0, Actual=0x00000000
 # ------------------------------------------------
-# t=       375 PASS: rdata = 00000000 at addr ffffffff is correct
+# t=       525 PASS: rdata = 00000000 at addr 00000000 is correct
+# ------------------------------------------------
+# t=       525 [TB_WRITE]: addr=00000000 data=a55aa55a
+# t=       825 [TB_READ]: addr=00000000 rdata=00000502
+# ------------------------------------------------
+# t=       825 PASS: rdata = 00000502 at addr 00000000 is correct
+# ------------------------------------------------
+# t=       825 [TB_WRITE]: addr=00000000 data=55555555
+# t=      1125 [TB_READ]: addr=00000000 rdata=00000501
+# ------------------------------------------------
+# t=      1125 PASS: rdata = 00000501 at addr 00000000 is correct
+# ------------------------------------------------
+# t=      1125 [TB_WRITE]: addr=00000000 data=00000800
+# t=      1425 [TB_READ]: addr=00000000 rdata=00000800
+# t=      1575 [TB_READ]: addr=00000000 rdata=00000800
+# t=      1575 PASS: TCR Expected=0x0000_0800, Actual=0x00000800
+# ------------------------------------------------
+# t=      1575 PASS: rdata = 00000800 at addr 00000000 is correct
+# ------------------------------------------------
+# t=      1575 [TB_WRITE]: addr=00000000 data=00000900
+# t=      1875 [TB_READ]: addr=00000000 rdata=00000800
+# t=      2025 [TB_READ]: addr=00000000 rdata=00000800
+# t=      2025 PASS: TCR Expected=0x0000_0800, Actual=0x00000800
+# ------------------------------------------------
+# t=      2025 PASS: rdata = 00000800 at addr 00000000 is correct
+# ------------------------------------------------
+# t=      2025 [TB_WRITE]: addr=00000000 data=00000000
+# *** TDR0 ***
+# t=      2176 [TB_WRITE]: addr=00000004 data=00000000
+# t=      2475 [TB_READ]: addr=00000004 rdata=00000000
+# t=      2625 [TB_READ]: addr=00000004 rdata=00000000
+# t=      2625 PASS: TDR0 Expected=0x0000_0000, Actual=0x00000000
+# ------------------------------------------------
+# t=      2625 PASS: rdata = 00000000 at addr 00000004 is correct
+# ------------------------------------------------
+# t=      2625 [TB_WRITE]: addr=00000004 data=ffffffff
+# t=      2925 [TB_READ]: addr=00000004 rdata=ffffffff
+# t=      3075 [TB_READ]: addr=00000004 rdata=ffffffff
+# t=      3075 PASS: TDR0 Expected=32'hffff_ffff, Actual=0xffffffff
+# ------------------------------------------------
+# t=      3075 PASS: rdata = ffffffff at addr 00000004 is correct
+# ------------------------------------------------
+# t=      3075 [TB_WRITE]: addr=00000004 data=a55aa55a
+# t=      3375 [TB_READ]: addr=00000004 rdata=a55aa55a
+# t=      3525 [TB_READ]: addr=00000004 rdata=a55aa55a
+# t=      3525 PASS: TDR0 Expected=32'ha55a_a55a, Actual=0xa55aa55a
+# ------------------------------------------------
+# t=      3525 PASS: rdata = a55aa55a at addr 00000004 is correct
+# ------------------------------------------------
+# *** TDR1 ***
+# t=      3525 [TB_WRITE]: addr=00000008 data=00000000
+# t=      3825 [TB_READ]: addr=00000008 rdata=00000000
+# t=      3975 [TB_READ]: addr=00000008 rdata=00000000
+# t=      3975 PASS: TDR1 Expected=32'h0, Actual=0x00000000
+# ------------------------------------------------
+# t=      3975 PASS: rdata = 00000000 at addr 00000008 is correct
+# ------------------------------------------------
+# t=      3975 [TB_WRITE]: addr=00000008 data=ffffffff
+# t=      4275 [TB_READ]: addr=00000008 rdata=ffffffff
+# t=      4425 [TB_READ]: addr=00000008 rdata=ffffffff
+# t=      4425 PASS: TDR1 Expected=32'hffff_ffff, Actual=0xffffffff
+# ------------------------------------------------
+# t=      4425 PASS: rdata = ffffffff at addr 00000008 is correct
+# ------------------------------------------------
+# t=      4425 [TB_WRITE]: addr=00000008 data=a55aa55a
+# t=      4725 [TB_READ]: addr=00000008 rdata=a55aa55a
+# t=      4875 [TB_READ]: addr=00000008 rdata=a55aa55a
+# t=      4875 PASS: TDR1 Expected=32'ha55a_a55a, Actual=0xa55aa55a
+# ------------------------------------------------
+# t=      4875 PASS: rdata = a55aa55a at addr 00000008 is correct
+# ------------------------------------------------
+# *** TCMP0 ***
+# t=      4875 [TB_WRITE]: addr=0000000c data=00000000
+# t=      5175 [TB_READ]: addr=0000000c rdata=00000000
+# t=      5325 [TB_READ]: addr=0000000c rdata=00000000
+# t=      5325 PASS: ADDR_TCMP0 Expected=32'h0, Actual=0x00000000
+# ------------------------------------------------
+# t=      5325 PASS: rdata = 00000000 at addr 0000000c is correct
+# ------------------------------------------------
+# t=      5325 [TB_WRITE]: addr=0000000c data=ffffffff
+# t=      5625 [TB_READ]: addr=0000000c rdata=ffffffff
+# t=      5775 [TB_READ]: addr=0000000c rdata=ffffffff
+# t=      5775 PASS: ADDR_TCMP0 Expected=32'hffff_ffff, Actual=0xffffffff
+# ------------------------------------------------
+# t=      5775 PASS: rdata = ffffffff at addr 0000000c is correct
+# ------------------------------------------------
+# t=      5775 [TB_WRITE]: addr=0000000c data=a55aa55a
+# t=      6075 [TB_READ]: addr=0000000c rdata=a55aa55a
+# t=      6225 [TB_READ]: addr=0000000c rdata=a55aa55a
+# t=      6225 PASS: ADDR_TCMP0 Expected=32'ha55a_a55a, Actual=0xa55aa55a
+# ------------------------------------------------
+# t=      6225 PASS: rdata = a55aa55a at addr 0000000c is correct
+# ------------------------------------------------
+# *** TCMP1 ***
+# t=      6225 [TB_WRITE]: addr=00000010 data=00000000
+# t=      6525 [TB_READ]: addr=00000010 rdata=00000000
+# t=      6675 [TB_READ]: addr=00000010 rdata=00000000
+# t=      6675 PASS: ADDR_TCMP1 Expected=32'h0, Actual=0x00000000
+# ------------------------------------------------
+# t=      6675 PASS: rdata = 00000000 at addr 00000010 is correct
+# ------------------------------------------------
+# t=      6675 [TB_WRITE]: addr=00000010 data=ffffffff
+# t=      6975 [TB_READ]: addr=00000010 rdata=ffffffff
+# t=      7125 [TB_READ]: addr=00000010 rdata=ffffffff
+# t=      7125 PASS: ADDR_TCMP1 Expected=32'hffff_ffff, Actual=0xffffffff
+# ------------------------------------------------
+# t=      7125 PASS: rdata = ffffffff at addr 00000010 is correct
+# ------------------------------------------------
+# t=      7125 [TB_WRITE]: addr=00000010 data=a55aa55a
+# t=      7425 [TB_READ]: addr=00000010 rdata=a55aa55a
+# t=      7575 [TB_READ]: addr=00000010 rdata=a55aa55a
+# t=      7575 PASS: ADDR_TCMP1 Expected=32'ha55a_a55a, Actual=0xa55aa55a
+# ------------------------------------------------
+# t=      7575 PASS: rdata = a55aa55a at addr 00000010 is correct
+# ------------------------------------------------
+# *** TIER ***
+# t=      7575 [TB_WRITE]: addr=00000014 data=00000000
+# t=      7875 [TB_READ]: addr=00000014 rdata=00000000
+# t=      8025 [TB_READ]: addr=00000014 rdata=00000000
+# t=      8025 PASS: ADDR_TIER Expected=32'h0, Actual=0x00000000
+# ------------------------------------------------
+# t=      8025 PASS: rdata = 00000000 at addr 00000014 is correct
+# ------------------------------------------------
+# t=      8025 [TB_WRITE]: addr=00000014 data=ffffffff
+# t=      8325 [TB_READ]: addr=00000014 rdata=00000001
+# t=      8475 [TB_READ]: addr=00000014 rdata=00000001
+# t=      8475 PASS: ADDR_TIER Expected=32'h1, Actual=0x00000001
+# ------------------------------------------------
+# t=      8475 PASS: rdata = 00000001 at addr 00000014 is correct
+# ------------------------------------------------
+# t=      8475 [TB_WRITE]: addr=00000014 data=a55aa55a
+# t=      8775 [TB_READ]: addr=00000014 rdata=00000000
+# t=      8925 [TB_READ]: addr=00000014 rdata=00000000
+# t=      8925 PASS: ADDR_TIER Expected=32'h0, Actual=0x00000000
+# ------------------------------------------------
+# t=      8925 PASS: rdata = 00000000 at addr 00000014 is correct
+# ------------------------------------------------
+# t=      8925 [TB_WRITE]: addr=00000018 data=00000001
+# t=      9225 [TB_READ]: addr=00000018 rdata=00000001
+# *** TISR ***
+# t=      9225 [TB_WRITE]: addr=00000018 data=ffffffff
+# t=      9525 [TB_READ]: addr=00000018 rdata=00000001
+# t=      9675 [TB_READ]: addr=00000018 rdata=00000001
+# t=      9675 PASS: ADDR_TISR Expected=32'h1, Actual=0x00000001
+# assert reset
+# release reset
+# check reg init
+# t=     10025 [TB_READ]: addr=00000000 rdata=00000100
+# ------------------------------------------------
+# t=     10025 PASS: rdata = 00000100 at addr 00000000 is correct
+# ------------------------------------------------
+# t=     10175 [TB_READ]: addr=00000004 rdata=00000000
+# ------------------------------------------------
+# t=     10175 PASS: rdata = 00000000 at addr 00000004 is correct
+# ------------------------------------------------
+# t=     10325 [TB_READ]: addr=00000008 rdata=00000000
+# ------------------------------------------------
+# t=     10325 PASS: rdata = 00000000 at addr 00000008 is correct
+# ------------------------------------------------
+# t=     10475 [TB_READ]: addr=0000000c rdata=ffffffff
+# ------------------------------------------------
+# t=     10475 PASS: rdata = ffffffff at addr 0000000c is correct
+# ------------------------------------------------
+# t=     10625 [TB_READ]: addr=00000010 rdata=ffffffff
+# ------------------------------------------------
+# t=     10625 PASS: rdata = ffffffff at addr 00000010 is correct
+# ------------------------------------------------
+# t=     10775 [TB_READ]: addr=00000014 rdata=00000000
+# ------------------------------------------------
+# t=     10775 PASS: rdata = 00000000 at addr 00000014 is correct
+# ------------------------------------------------
+# t=     10925 [TB_READ]: addr=00000018 rdata=00000000
+# ------------------------------------------------
+# t=     10925 PASS: rdata = 00000000 at addr 00000018 is correct
+# ------------------------------------------------
+# t=     11075 [TB_READ]: addr=0000001c rdata=00000000
+# ------------------------------------------------
+# t=     11075 PASS: rdata = 00000000 at addr 0000001c is correct
 # ------------------------------------------------
 # Test_result PASSED
-# ** Note: $finish    : ../tb/test_bench.v(76)
-#    Time: 475 ns  Iteration: 0  Instance: /test_bench
-# End time: 23:17:56 on Jul 08,2025, Elapsed time: 0:00:03
-# Errors: 0, Warnings: 1
+# ** Note: $finish    : ../tb/test_bench.v(119)
+#    Time: 11175 ns  Iteration: 0  Instance: /test_bench
+# Saving coverage database on exit...
+# End time: 17:54:20 on Jul 09,2025, Elapsed time: 0:00:03
+# Errors: 0, Warnings: 0

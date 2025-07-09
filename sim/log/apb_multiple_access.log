@@ -1,0 +1,89 @@
+# vsim -coverage -l apb_multiple_access.log -c test_bench -voptargs="+cover=bcesft" -assertdebug -do "coverage save -onexit apb_multiple_access.ucdb; log -r /*;run -all" 
+# Start time: 15:42:17 on Jul 09,2025
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# //  Questa Intel Starter FPGA Edition-64
+# //  Version 2023.3 linux_x86_64 Jul 17 2023
+# //
+# //  Copyright 1991-2023 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# Loading work.test_bench(fast)
+# coverage save -onexit apb_multiple_access.ucdb
+#  log -r /*
+# run -all
+# 
+# ====================================
+# ==== Starting Test Suite ====
+# ====================================
+# 
+# ====================================
+# === Test Case: APB Multiple Access ===
+# ====================================
+# t=       100 [TB_WRITE]: addr=00000000 data=00000000
+# t=       226 [TB_WRITE]: addr=00000014 data=00000000
+# t=       376 [TB_WRITE]: addr=00000018 data=00000001
+# t=       526 [TB_WRITE]: addr=00000004 data=00000000
+# t=       676 [TB_WRITE]: addr=00000008 data=00000000
+# t=       826 [TB_WRITE]: addr=0000000c data=00000000
+# t=       976 [TB_WRITE]: addr=00000010 data=00000000
+# 
+# ===================[ ALL PASS CASES ]===================
+# 
+# --- PASS Case: Multiple Writes and Reads ---
+# t=      1126 [TB_WRITE]: addr=00000000 data=00000101
+# t=      1276 [TB_WRITE]: addr=00000004 data=11111111
+# t=      1426 [TB_WRITE]: addr=00000008 data=22222222
+# t=      1576 [TB_WRITE]: addr=0000000c data=33333333
+# t=      1726 [TB_WRITE]: addr=00000010 data=44444444
+# t=      1876 [TB_WRITE]: addr=00000014 data=00000001
+# t=      2175 [TB_READ]: addr=00000000 rdata=00000101
+# t=      2175 PASS: TCR Expected=0x00000101, Actual=0x00000101
+# ------------------------------------------------
+# t=      2175 PASS: rdata = 00000101 at addr 00000000 is correct
+# ------------------------------------------------
+# t=      2325 [TB_READ]: addr=00000008 rdata=22222222
+# t=      2325 PASS: TDR1 Expected=0x22222222, Actual=0x22222222
+# ------------------------------------------------
+# t=      2325 PASS: rdata = 22222222 at addr 00000008 is correct
+# ------------------------------------------------
+# t=      2475 [TB_READ]: addr=0000000c rdata=33333333
+# t=      2475 PASS: TCMP0 Expected=0x33333333, Actual=0x33333333
+# ------------------------------------------------
+# t=      2475 PASS: rdata = 33333333 at addr 0000000c is correct
+# ------------------------------------------------
+# t=      2625 [TB_READ]: addr=00000010 rdata=44444444
+# t=      2625 PASS: TCMP1 Expected=0x44444444, Actual=0x44444444
+# ------------------------------------------------
+# t=      2625 PASS: rdata = 44444444 at addr 00000010 is correct
+# ------------------------------------------------
+# t=      2775 [TB_READ]: addr=00000014 rdata=00000001
+# t=      2775 PASS: TIER Expected=0x00000001, Actual=0x00000001
+# ------------------------------------------------
+# t=      2775 PASS: rdata = 00000001 at addr 00000014 is correct
+# ------------------------------------------------
+# 
+# --- PASS Case: TISR Write/Read ---
+# t=      2775 [TB_WRITE]: addr=00000018 data=00000001
+# t=      3075 [TB_READ]: addr=00000018 rdata=00000000
+# t=      3075 PASS: TISR Expected=0x00000000, Actual=0x00000000
+# ------------------------------------------------
+# t=      3075 PASS: rdata = 00000000 at addr 00000018 is correct
+# ------------------------------------------------
+# 
+# ======================================
+# Test_result PASSED
+# Total errors (including FAIL cases for coverage):           0
+# ======================================
+# ** Note: $finish    : ../tb/test_bench.v(119)
+#    Time: 3175 ns  Iteration: 0  Instance: /test_bench
+# Saving coverage database on exit...
+# End time: 15:42:20 on Jul 09,2025, Elapsed time: 0:00:03
+# Errors: 0, Warnings: 0

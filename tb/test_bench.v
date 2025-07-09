@@ -27,11 +27,9 @@ module test_bench;
     reg [31:0] cnt_chk_cycle;
     reg [3:0]  div_val;
     reg [63:0] exp_cnt;      
+	
 
-    reg golden_cnt_cfg_en   ;
-    reg [63:0] golden_cnt_cfg;
-    wire [63:0] golden_cnt;
-
+    reg val;
     reg apb_err_psel;
     reg apb_err_penable;
     reg pslverr_chk_fail, pready_chk_fail;
@@ -56,8 +54,53 @@ module test_bench;
 
     );
 
+// Golden Model
+    reg [63:0] golden_cnt;
+    reg        golden_int;
+    reg [3:0]  div_val_reg;
+    reg        div_en_reg;
+    reg        timer_en_reg;
+    reg [7:0]  div_counter;
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            golden_cnt <= 0;
+            golden_int <= 0;
+            div_val_reg <= 4'h1; // Default div_val = 1
+            div_en_reg <= 0;
+            timer_en_reg <= 0;
+            div_counter <= 0;
+        end else begin
+            if (psel && penable && pwrite && paddr == ADDR_TCR) begin
+                timer_en_reg <= pwdata[0];
+                div_en_reg <= pwdata[1];
+                div_val_reg <= (pwdata[11:8] > 8) ? 8 : pwdata[11:8];
+            end
+            if (timer_en_reg && !dbg_mode) begin
+                if (!div_en_reg || div_val_reg == 0) begin
+                    golden_cnt <= golden_cnt + 1;
+                    div_counter <= 0;
+                end else if (div_counter == (1 << div_val_reg) - 1) begin
+                    golden_cnt <= golden_cnt + 1;
+                    div_counter <= 0;
+                end else begin
+                    div_counter <= div_counter + 1;
+                end
+            end
+            if (golden_cnt == {u_timer.regset.tcmp1, u_timer.regset.tcmp0} && u_timer.regset.int_en)
+                golden_int <= 1;
+            else if (psel && penable && pwrite && paddr == ADDR_TISR && pwdata[0])
+                golden_int <= 0;
+        end
+    end
+	task tsk_cfg_golden_cnt;
+	input [63:0] val;
+	begin
+		@(posedge clk);
+		#1;
+		golden_cnt=val;
+	end
+	endtask
 
-   `include "run_test.v"
   	
     initial begin 
   	  clk = 0;
@@ -86,10 +129,10 @@ module test_bench;
         dbg_mode = 0;
         pstrb = 0;
         err = 0;
+	pass_err =0;
         cnt_chk_cycle = 0;
         div_val = 0;
-        golden_cnt_cfg_en = 0   ;
-        golden_cnt_cfg      = 0  ;
+        
         apb_err_psel = 0;
         apb_err_penable = 0;
         pslverr_chk_fail = 0;
@@ -161,19 +204,22 @@ module test_bench;
         input [31:0]  in_data ;
         input [31:0]  exp_data;
         input [31:0]  mask;
-  	    
+ 	input pf;
+	begin
 		if( (in_data & mask) !== (exp_data & mask) ) begin
 			$display("------------------------------------------------");
 			$display("t=%10d FAIL: rdata at addr %x is not correct",$time, in_addr);
 			$display("Exp: %x Actual:%x",exp_data & mask, in_data & mask);
 			$display("------------------------------------------------");
-            #100;
-            err=err+1;
+        	        #100;
+            		err=err+1;
+			if (pf) pass_err = pass_err +1;
 		end else begin
 			$display("------------------------------------------------");
 			$display("t=%10d PASS: rdata = %x at addr %x is correct",$time,in_data, in_addr);
 			$display("------------------------------------------------");
 		end
+	end
         
     endtask
 
@@ -182,31 +228,31 @@ module test_bench;
         begin
       	    
             apb_rd( ADDR_TCR, task_rdata);
-            cmp_data( ADDR_TCR, task_rdata, 32'h0000_0100, 32'hffff_ffff);
+            cmp_data( ADDR_TCR, task_rdata, 32'h0000_0100, 32'hffff_ffff,1);
             
             apb_rd( ADDR_TDR0, task_rdata);
-            cmp_data( ADDR_TDR0, task_rdata, 32'h0000_0000, 32'hffff_ffff);
+            cmp_data( ADDR_TDR0, task_rdata, 32'h0000_0000, 32'hffff_ffff,1);
             
             apb_rd( ADDR_TDR1, task_rdata);
-            cmp_data( ADDR_TDR1, task_rdata, 32'h0000_0000, 32'hffff_ffff);
+            cmp_data( ADDR_TDR1, task_rdata, 32'h0000_0000, 32'hffff_ffff,1);
             
             apb_rd( ADDR_TCMP0, task_rdata);
-            cmp_data( ADDR_TCMP0, task_rdata, 32'hffff_ffff, 32'hffff_ffff);
+            cmp_data( ADDR_TCMP0, task_rdata, 32'hffff_ffff, 32'hffff_ffff,1);
             
             apb_rd( ADDR_TCMP1, task_rdata);
-            cmp_data( ADDR_TCMP1, task_rdata, 32'hffff_ffff, 32'hffff_ffff);
+            cmp_data( ADDR_TCMP1, task_rdata, 32'hffff_ffff, 32'hffff_ffff,1);
             
             apb_rd( ADDR_TIER, task_rdata);
-            cmp_data( ADDR_TIER, task_rdata, 32'h0000_0000, 32'hffff_ffff);
+            cmp_data( ADDR_TIER, task_rdata, 32'h0000_0000, 32'hffff_ffff,1);
             
             apb_rd( ADDR_TISR, task_rdata);
-            cmp_data( ADDR_TISR, task_rdata, 32'h0000_0000, 32'hffff_ffff);
+            cmp_data( ADDR_TISR, task_rdata, 32'h0000_0000, 32'hffff_ffff,1);
     
             apb_rd( ADDR_THCSR, task_rdata);
-            cmp_data( ADDR_THCSR, task_rdata, 32'h0000_0000, 32'hffff_ffff);
+            cmp_data( ADDR_THCSR, task_rdata, 32'h0000_0000, 32'hffff_ffff,1);
     
         end
     endtask
-
-
+	   `include "run_test.v"
+    
 endmodule
